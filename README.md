@@ -7,6 +7,7 @@ helm install elastic-operator elastic/eck-operator -n elastic-system --create-na
 ```
 - Deploy Elasticsearch 7.10.0 (or other)
 ```
+kubectl apply -n elastic-system -f - <<EOF
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
@@ -18,9 +19,11 @@ spec:
     count: 1
     config:
       node.store.allow_mmap: false
+EOF
 ```
 - Deploy Kibana 7.10.0 (or other)
 ```
+kubectl apply -n elastic-system -f - <<EOF
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
@@ -30,6 +33,7 @@ spec:
   count: 1
   elasticsearchRef:
     name: quickstart-7
+EOF
 ```
 - Deploy fluent-bit as forwarder with proper values
 ```
