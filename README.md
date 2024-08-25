@@ -1,4 +1,13 @@
 # elastic-stack install steps
+> [!NOTE]
+> Elastic user password required in fluentd values is being created as secret after elasticsearch deployment.
+> 
+> fluentbit output port and fluentd input port need to align.
+> 
+> Kibana scope for es-instance basing on `elasticsearchRef`.
+> 
+> Fluentd es plugin requires specific version (newest comes with newest client - to fix this build new image with proper plugin) of elasticsearch client.
+
 - Install ECK operator 2.8 (or other)
 ```
 helm repo add elastic https://helm.elastic.com
@@ -40,7 +49,7 @@ EOF
 helm repo add fluent https://fluent.github.io/helm-charts
 helm install fluent-bit -n elastic-system fluent/fluent-bit -f values-fluentbit.yaml
 ```
-- Deploy fluentd as aggregator with plugic specific version (newest comes with newest client - to fix this build new image with proper plugin)
+- Deploy fluentd as aggregator
 ```
 helm install fluentd oci://registry-1.docker.io/bitnamicharts/fluentd --version 6.5.12 -f values-fluentd.yaml
 ```
