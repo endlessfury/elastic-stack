@@ -71,3 +71,5 @@ RUN gem uninstall elasticsearch-api -v '>8.0.0'
 RUN gem uninstall elasticsearch-xpack -v '7.17.11'
 USER 1001
 ```
+# results
+![image](files://result.jpg)
