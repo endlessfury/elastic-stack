@@ -40,7 +40,25 @@ EOF
 helm repo add fluent https://fluent.github.io/helm-charts
 helm install fluent-bit -n elastic-system fluent/fluent-bit -f values-fluentbit.yaml
 ```
-- Deploy fluentd as aggregator
+- Deploy fluentd as aggregator with plugic specific version (newest comes with newest client - to fix this build new image with proper plugin)
 ```
 helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd --version 6.5.12 -f values-fluentd.yaml
+```
+# build new fluentd image
+New Dockerimage for bitnami/fluentd:1.17.1-debian-12-r0 to install 7.10 client
+```
+FROM bitnami/fluentd:1.17.1-debian-12-r0
+USER root
+RUN gem install elasticsearch -v 7.10
+RUN gem install elasticsearch-transport -v 7.10
+RUN gem install elasticsearch-xpack -v 7.10
+RUN gem install elasticsearch-api -v 7.10
+RUN gem uninstall fluent-plugin-elasticsearch
+RUN gem install fluent-plugin-elasticsearch -v 4.3.1
+RUN gem install fluent-plugin-rewrite-tag-filter
+RUN gem install fluent-plugin-multi-format-parser
+RUN gem uninstall elasticsearch -v '>8.0.0'
+RUN gem uninstall elasticsearch-api -v '>8.0.0'
+RUN gem uninstall elasticsearch-xpack -v '7.17.11'
+USER 1001
 ```
